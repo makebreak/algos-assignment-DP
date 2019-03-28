@@ -1,0 +1,35 @@
+Given: n floors, m glass sheets
+Find: What’s the minimum amount of trials?
+
+(a) Describe the optimal substructure/recurrence that would lead to a recursive solution
+
+If the glass shatters, 
+	we can eliminate all floors above it and consider floors-1. 
+If the glass does not shatter, 
+	we can consider all the floors above it and eliminate lower floors, so floors-currentFloor. 
+
+Because we need to find the highest floor, or worst case, 
+	for each floor, 
+		we need to find the max of the two cases above. 
+We need to find the floor that yields the minimum number of trials.
+
+
+
+(b) Draw recurrence tree for given (floors = 4, sheets = 2)
+
+
+
+(c) Code your recursive solution under GlassFallingRecur(int n numFloors, int m numGlass)
+// see code
+
+(d) How many distinct subproblems do you end up with given 4 floors and 2 sheets?
+
+(e) How many distinct subproblems for n floors and m sheets?
+
+(f) Describe how you would memoize GlassFallingRecur
+
+(g) Code a bottom-up solution GlassFallingBottomUp(int n numFloors, int m numGlass)
+// see code 
+
+Turn in: A pdf write-up of parts: a, b, d, e, f with clear and careful explanations! Coding parts c, g in the file GlassFalling.java
+
