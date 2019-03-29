@@ -3,12 +3,44 @@
  */
 
 public class RodCutting {
+          
+    // Do not change the parameters!
+    public int rodCuttingRecur(int rodLength, int[] lengthPrices) {
 
-  // Do not change the parameters!
+	// create an array to keep track of solved subproblems
+	// each entry is the optimal solution for rodLength i 
+        int[] memo = new int[lengthPrices.length+1];
+
+	return rodCuttingRecur(rodLength,lengthPrices, memo);
+    }
+
+    // memoized recursive version
+    public int rodCuttingRecur(int rodLength, int[] lengthPrices, int[] dp) {
+
+	if (rodLength == 0) return 0;
+
+	// return stored answer if available
+	if (dp[rodLength] != 0) return dp[rodLength];
+	
+	int optSol = 0; // optimal solution variable
+
+	// we evaluate the optimal solution, between the available optimal solution and
+	// a rod of length i plus the optimal solution for the remaining length
+	for (int i=1; i <= rodLength; i++) {
+	    optSol = Math.max(optSol, 
+			      lengthPrices[i-1] + rodCuttingRecur(rodLength-i,lengthPrices, dp));
+      }
+
+      return dp[rodLength] = optSol;
+    }
+
+    // extra: recursive without memoization
+    /*
   public int rodCuttingRecur(int rodLength, int[] lengthPrices) {
       //there are rodLength subproblems
       if (rodLength == 0) return 0;
 
+      
       int optSol = 0; //lengthPrices[rodLength]; // optimal solution
       
       for (int i=1; i <= rodLength; i++) {
@@ -19,7 +51,9 @@ public class RodCutting {
 
       return optSol;
   }
+     */
 
+    
   // Do not change the parameters!
     public int rodCuttingBottomUp(int rodLength, int[] lengthPrices) {
 	int[] array = new int[rodLength+1];
@@ -28,13 +62,9 @@ public class RodCutting {
 	for(int j=1; j <= rodLength; j++) {
 	    int q = -1;
 	    for (int i=1; i <= j; i++) {
-		int diff = j-i;
-		int what = i-1;
-		System.out.println("j is: " + j + ", i-1 is" + what + " and j-i is" + diff);
 		q = Math.max(q, lengthPrices[i-1] + array[j-i]);
 	    }
       	    array[j] = q;
-	    System.out.println("array[" + j + "], or q, is: " + q);
 	}
 	return array[rodLength];
     }
@@ -56,14 +86,6 @@ public class RodCutting {
       int maxSell2Bottom = rc.rodCuttingBottomUp(length2, prices2);
       System.out.println(maxSell1Recur + " " + maxSell1Bottom);
       System.out.println(maxSell2Recur + " " + maxSell2Bottom);
-
-      /*      //DELETE BELOW 
-      int length1 = 4;
-      int[] prices1 = {1, 5, 8, 9};
-      int maxSell1Recur = rc.rodCuttingRecur(length1, prices1);
-      */
-      //System.out.println(maxSell1Recur);
-      //System.out.println(maxSell2Recur);
        
   }
 }
