@@ -3,20 +3,93 @@ Find: What’s the minimum amount of trials?
 
 (a) Describe the optimal substructure/recurrence that would lead to a recursive solution
 
-If the glass shatters, 
+We need to find the floor that yields the minimum number of trials in the worst case.
+Because we assume the worst case, 
+	for each floor, 
+		we need to find the max of the two cases:
+1) If the glass shatters, 
 	we can eliminate all floors above it and consider floors-1. 
-If the glass does not shatter, 
+2) If the glass does not shatter, 
 	we can consider all the floors above it and eliminate lower floors, so floors-currentFloor. 
 
-Because we need to find the highest floor, or worst case, 
-	for each floor, 
-		we need to find the max of the two cases above. 
-We need to find the floor that yields the minimum number of trials.
+We traverse the floors starting at the first floor.
+For each floor, we take the worst case scenario by recursively calculating the max number of trials needed.
+This is done by comparing the max number of trials for the two cases above.
+Once we have calculated the max for the given floor, we compare that to the current minimum number of trials needed.
+If the current max is less than the current min, we set min equal to it.
 
+Excerpt of code:
+	if (floors == 1 || floors == 0)
+	    return floors; 
 
+	// cannot have any trials if we have no sheets
+	if (sheets == 0) return 0;
+
+	// if we have only 1 sheet would need to try all the floors in the worst case
+	if (sheets == 1)
+	    return floors;
+
+	int min = Integer.MAX_VALUE; // set min to a high number, to tell if it didn't change
+	int x, y;
+
+	// as we go up the floors, 
+	for (x = 1; x <= floors; x++) {
+	    y = Math.max(glassFallingRecur(x-1, sheets-1), //check lower floors, assume sheet broke
+			 glassFallingRecur(floors-x, sheets)); //check upper floors, assume sheet okay
+	    if (y < min)
+		min = y; // set min to value above
+	    System.out.println("This x is " + x + "with a min of " + min);
+	}
+       	return min + 1; // we add 1 to show we made it through another trial
+
+//
 
 (b) Draw recurrence tree for given (floors = 4, sheets = 2)
 
+Using recurrence:
+      y = Math.max(recurse(x-1, sheets-1), //check lower floors, assume sheet broke
+		   recurse(floors-x, sheets)); //check upper floors, assume sheet okay
+
+F=4, S=2
+recurse[4,2]
+
+Floors |x|
+
+// floor |1| optimal solution = 4
+       
+       recurse[0,1]		recurse[3,2] // return 3          
+          |		    	   |
+	  0	     recurse[0,1]     recurse[2,2] // return 2
+		        |		 |	
+	  	   	0    recurse[1,1]  recurse[1,2] // return 1
+		   	        |	      |
+			   	1	      1
+
+//floor |2| optimal solution = 4
+
+	recurse[3,1] // return 3		recurse[2,2] // return 2
+	     |		       			   |
+recurse[2,0]  recurse[1,1]   	       recurse[1,1]  recurse[1,2]
+   |	         |	      	          |	      |
+   0		 1			  1	      1
+
+
+//floor |3| optimal solution = 3
+
+	recurse[2,1] // return 2		recurse[1,2] // return 1
+	     |		       			   |
+recurse[1,0]  recurse[1,1]   	       		   1
+   |	         |
+   0		 1
+
+
+//floor |4| optimal solution = 3
+
+	recurse[3,1] // return 2		recurse[0,2] // return 0
+	     |		       			   |
+recurse[2,0]  recurse[1,1]	        	   0
+   |	         |  	        	      	          
+   0		 1
 
 
 (c) Code your recursive solution under GlassFallingRecur(int n numFloors, int m numGlass)
