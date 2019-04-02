@@ -12,8 +12,7 @@ public class GlassFalling {
 	if (sheets == 1) return floors;
 
 	// would only need 1 trial if there is 1 floor, none if none
-	if (floors == 1) return 1;
-	if (floors == 0) return 0;
+	if (floors == 1 || floors == 0) return floors;
 
 	// cannot have any trials if we have no sheets
 	//	if (sheets == 0) return 0;
@@ -61,11 +60,10 @@ public class GlassFalling {
 
 	// as we go up the floors, 
 	for (x = 1; x <= floors; x++) {
-	    y = Math.max(glassFallingRecur(x-1, sheets-1), //check lower floors, assume sheet broke
-			 glassFallingRecur(floors-x, sheets)); //check upper floors, assume sheet okay
+	    y = Math.max(glassFallingMemoized(x-1, sheets-1, dp), //check lower floors, assume sheet broke
+			 glassFallingMemoized(floors-x, sheets, dp)); //check upper floors, assume sheet okay
 	    if (y < min)
 		min = y; // set min to value above
-      	    System.out.println("Memo: This x is " + x + "with a min of " + min);
 	}
 	
        	return dp[floors][sheets] = min + 1; // we add 1 to show we made it through another trial
@@ -81,23 +79,13 @@ public class GlassFalling {
 
   public static void main(String args[]){
       GlassFalling gf = new GlassFalling();
-      /*
+
       // Do not touch the below lines of code, and make sure
       // in your final turned-in copy, these are the only things printed
       int minTrials1Recur = gf.glassFallingRecur(27, 2);
       int minTrials1Bottom = gf.glassFallingBottomUp(27, 2);
-      int minTrials2Memo = gf.glassFallingMemoized(100, 3, third parameter);
-      int minTrials2Bottom = gf.glassFallingBottomUp(100, 3);
-      System.out.println(minTrials1Recur + " " + minTrials1Bottom);
-      System.out.println(minTrials2Memo + " " + minTrials2Bottom);
-      */
-
-      //DELETE LATER
-      int minTrials1Recur = gf.glassFallingRecur(10, 2);
-      int minTrials1Bottom = gf.glassFallingBottomUp(10, 2);
-      int minTrials2Recur = gf.glassFallingRecur(4, 2);
       int minTrials2Memo = gf.glassFallingMemoized(100, 3);
-      int minTrials2Bottom = gf.glassFallingBottomUp(4, 2);
+      int minTrials2Bottom = gf.glassFallingBottomUp(100, 3);
       System.out.println(minTrials1Recur + " " + minTrials1Bottom);
       System.out.println(minTrials2Memo + " " + minTrials2Bottom);
 
