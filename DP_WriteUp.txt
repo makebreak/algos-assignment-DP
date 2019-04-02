@@ -113,12 +113,11 @@ Floors |x|
 0,2
 
 (e) 	How many distinct subproblems for n floors and m sheets? [n = floors, m = sheets]
-    	The number of distinct subproblems is: n + 1 + #subproblems for [n-1, m-1]
-	[n-1, m-1] = n - 1 + 1 + # subproblems for [n-2, m-2]
-	[n-2, m-2] = n - 2 + 1 + # subproblems for [n-3, m-3]
-	...
-	At a certain point floors or sheets will reach one. 
+    	The number of distinct subproblems is: 2n + # remaining subproblems for [n-1, m-1]
+	This turns out to be 2n + (n-1) + (n-2) + ... + (n-x) 
+	where x = floors - 2. 
 
+	We can write this as 2n + the Rieman's Sum from x=n-2 to n. 
 
 (f) Describe how you would memoize GlassFallingRecur
 
