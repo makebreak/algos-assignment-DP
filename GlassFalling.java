@@ -35,46 +35,72 @@ public class GlassFalling {
 
     // Memoized version 
     public int glassFallingMemoized(int floors, int sheets) {
-	int[][] dp = new int[floors + 1][sheets + 1];
-	return glassFallingMemoized(floors, sheets, dp);
+	int[][] memo = new int[floors + 1][sheets + 1];
+	return glassFallingMemoized(floors, sheets, memo);
     }
     
-    public int glassFallingMemoized(int floors, int sheets, int dp[][]) {
+    public int glassFallingMemoized(int floors, int sheets, int memo[][]) {
 
-	// check if already stored in dp
-	if (dp[floors][sheets] != 0) return dp[floors][sheets];
+	// check if already stored in memo
+	if (memo[floors][sheets] != 0) return memo[floors][sheets];
 
 	// would only need 1 trial if there is 1 floor, none if none
 	if (floors == 1 || floors == 0)
 	    return floors; 
-
-	// cannot have any trials if we have no sheets. could probably delete this case. 
-	if (sheets == 0) return 0;
 
 	// if we have only 1 sheet would need to try all the floors in the worst case
 	if (sheets == 1)
 	    return floors;
 
 	int min = Integer.MAX_VALUE; // set min to a high number, to tell if it didn't change
-	int x, y;
 
 	// as we go up the floors, 
-	for (x = 1; x <= floors; x++) {
-	    y = Math.max(glassFallingMemoized(x-1, sheets-1, dp), //check lower floors, assume sheet broke
-			 glassFallingMemoized(floors-x, sheets, dp)); //check upper floors, assume sheet okay
+	for (int x = 1; x <= floors; x++) {
+	    int y = Math.max(glassFallingMemoized(x-1, sheets-1, memo), //check lower floors, assume sheet broke
+			 glassFallingMemoized(floors-x, sheets, memo)); //check upper floors, assume sheet okay
 	    if (y < min)
 		min = y; // set min to value above
 	}
 	
-       	return dp[floors][sheets] = min + 1; // we add 1 to show we made it through another trial
+       	return memo[floors][sheets] = min + 1; // we add 1 to show we made it through another trial
     }
   
+    
+    // Do not change the parameters!
+    public int glassFallingBottomUp(int floors, int sheets) {
+	int[][] dp = new int[floors+1][sheets+1];
 
-  // Do not change the parameters!
-  public int glassFallingBottomUp(int floors, int sheets) {
-      int[] dp = new int[floors];
-    return 0;
-  }
+	dp[0][0] = 0;
+
+	for(int i=1; i < sheets; i++) {
+	    dp[0][i] = 0;
+	    dp[1][i] = 1;
+	}
+
+	for(int i=1; i < floors; i++) 
+	    dp[i][1] = i;
+	
+	
+	int floorMax = -1;
+	int min = Integer.MAX_VALUE; // set min to a high number, to tell if it 
+
+	for(int x=2; x <= sheets; x++) {
+
+	    for(int j=2; j <= floors; j++) {
+		min = Integer.MAX_VALUE;
+		
+		for(int k=1; k<=j; k++) {
+		    floorMax = 1 + Math.max(dp[k-1][x-1], dp[j-k][x]);
+		    if (floorMax < min) { // find max per floor
+			min = floorMax;
+			dp[j][x] = min;
+		    }
+		  
+		}
+	    }
+	}
+        return min;
+    }
 
 
   public static void main(String args[]){
