@@ -36,7 +36,7 @@ public class RodCutting {
 
     // extra: recursive without memoization
     /*
-  public int rodCuttingRecur(int rodLength, int[] lengthPrices) {
+    public int rodCuttingRecur(int rodLength, int[] lengthPrices) {
       //there are rodLength subproblems
       if (rodLength == 0) return 0;
 
@@ -46,7 +46,6 @@ public class RodCutting {
       for (int i=1; i <= rodLength; i++) {
 	  optSol = Math.max(optSol, 
 			    lengthPrices[i-1] + rodCuttingRecur(rodLength-i,lengthPrices));
-	  System.out.println("recursive step " + i + " opt solution: " + optSol);
       }
 
       return optSol;

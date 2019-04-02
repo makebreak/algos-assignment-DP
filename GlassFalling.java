@@ -7,12 +7,51 @@ public class GlassFalling {
   // Do not change the parameters!
 
     public int glassFallingRecur(int floors, int sheets) {
+	if (floors > 6) {
+	    System.out.println("for floor " + floors + " and sheets" + sheets);
+	}
+	    // if we have only 1 sheet would need to try all the floors in the worst case
+	if (sheets == 1) return floors;
+
+	// would only need 1 trial if there is 1 floor, none if none
+	if (floors == 1) return 1;
+	if (floors == 0) return 0;
+
+	// cannot have any trials if we have no sheets
+	//	if (sheets == 0) return 0;
+
+	int min = Integer.MAX_VALUE; // set min to a high number, to tell if it didn't change
+
+	// as we go up the floors, 
+	for (int x = 1; x <= floors; x++) {
+       	    int y = Math.max(5, 7); //glassFallingRecur(x-1, sheets-1), //check lower floors, assume sheet broke
+			     //glassFallingRecur(floors-x, sheets)); //check upper floors, assume sheet okay
+	    if (y < min)
+		min = y; // set min to value above
+	    //	    System.out.println("Recur: x is " + x + " with a min of " + min);
+	}
+
+	int ans = min+1;
+       	return ans; // we add 1 to show we made it through another trial
+  }
+
+
+    // Memoized version 
+    public int glassFallingMemoized(int floors, int sheets) {
+	int[][] dp = new int[floors + 1][sheets + 1];
+	return glassFallingMemoized(floors, sheets, dp);
+    }
+    
+    public int glassFallingMemoized(int floors, int sheets, int dp[][]) {
+
+	// check if already stored in dp
+	if (dp[floors][sheets] != 0) return dp[floors][sheets];
 
 	// would only need 1 trial if there is 1 floor, none if none
 	if (floors == 1 || floors == 0)
 	    return floors; 
 
-	// cannot have any trials if we have no sheets
+	// cannot have any trials if we have no sheets. could probably delete this case. 
 	if (sheets == 0) return 0;
 
 	// if we have only 1 sheet would need to try all the floors in the worst case
@@ -28,24 +67,12 @@ public class GlassFalling {
 			 glassFallingRecur(floors-x, sheets)); //check upper floors, assume sheet okay
 	    if (y < min)
 		min = y; // set min to value above
-	    System.out.println("This x is " + x + "with a min of " + min);
+      	    System.out.println("Memo: This x is " + x + "with a min of " + min);
 	}
 	
-       	return min + 1; // we add 1 to show we made it through another trial
-  }
-
-    public boolean tryGlass(int n) {
-	if (n >= 3) return true;
-	else return false;
+       	return dp[floors][sheets] = min + 1; // we add 1 to show we made it through another trial
     }
-
-    // Optional:
-    // Pick whatever parameters you want to, just make sure to return an int.
-    public int glassFallingMemoized(int floors, int sheets, int low, int high, int dp[]) {
-
-	// Fill in here and change the return
-	return 0;
-    }
+  
 
 
 
@@ -63,19 +90,20 @@ public class GlassFalling {
       // in your final turned-in copy, these are the only things printed
       int minTrials1Recur = gf.glassFallingRecur(27, 2);
       int minTrials1Bottom = gf.glassFallingBottomUp(27, 2);
-      int minTrials2Recur = gf.glassFallingRecur(100, 3);
+      int minTrials2Memo = gf.glassFallingMemoized(100, 3, third parameter);
       int minTrials2Bottom = gf.glassFallingBottomUp(100, 3);
       System.out.println(minTrials1Recur + " " + minTrials1Bottom);
-      System.out.println(minTrials2Recur + " " + minTrials2Bottom);
+      System.out.println(minTrials2Memo + " " + minTrials2Bottom);
       */
 
       //DELETE LATER
       int minTrials1Recur = gf.glassFallingRecur(10, 2);
       int minTrials1Bottom = gf.glassFallingBottomUp(10, 2);
       int minTrials2Recur = gf.glassFallingRecur(4, 2);
+      int minTrials2Memo = gf.glassFallingMemoized(100, 3);
       int minTrials2Bottom = gf.glassFallingBottomUp(4, 2);
       System.out.println(minTrials1Recur + " " + minTrials1Bottom);
-      System.out.println(minTrials2Recur + " " + minTrials2Bottom);
+      System.out.println(minTrials2Memo + " " + minTrials2Bottom);
 
   }
 }
